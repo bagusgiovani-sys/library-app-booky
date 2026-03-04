@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
+import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
@@ -9,7 +10,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "text-white hover:opacity-90",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
@@ -43,6 +44,7 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  style,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
@@ -50,14 +52,27 @@ function Button({
   }) {
   const Comp = asChild ? Slot.Root : "button"
 
+  // Apply primary-300 background for default variant unless overridden by style prop
+  const defaultStyle = variant === "default" && !(style as React.CSSProperties)?.backgroundColor
+    ? { backgroundColor: 'var(--primary-300)', ...style }
+    : style
+
   return (
-    <Comp
-      data-slot="button"
-      data-variant={variant}
-      data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
+    <motion.div
+      whileTap={{ scale: 0.97 }}
+      whileHover={{ opacity: 0.92 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      style={{ display: 'contents' }}
+    >
+      <Comp
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        className={cn(buttonVariants({ variant, size, className }))}
+        style={defaultStyle}
+        {...props}
+      />
+    </motion.div>
   )
 }
 
