@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Upload, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { useBookDetail } from '@/hooks/useBooks'
 import { useCategories } from '@/hooks/useCategories'
-import { useAdminUpdateBook } from '@/hooks/useAdmin'
+import { useAdminCreateBook } from '@/hooks/useAdmin'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,20 +11,14 @@ import { motion } from 'framer-motion'
 
 const CATEGORY_ORDER = ['Fiction', 'Non-Fiction', 'Self-Improvement', 'Finance', 'Science', 'Education']
 
-export default function BookEdit() {
-  const { id } = useParams()
+export default function AddBook() {
   const navigate = useNavigate()
-  const isNew = id === 'new'
-
-  const { data: bookData } = useBookDetail(isNew ? 0 : Number(id))
   const { data: categoriesData } = useCategories()
-  const { mutate: updateBook, isPending } = useAdminUpdateBook(Number(id))
+  const { mutate: createBook, isPending } = useAdminCreateBook()
 
-  const book = bookData?.data
   const categories = categoriesData ?? []
 
   const [title, setTitle] = useState('')
-  const [isbn, setIsbn] = useState('')
   const [author, setAuthor] = useState('')
   const [categoryId, setCategoryId] = useState<number | ''>('')
   const [totalPages, setTotalPages] = useState('')
@@ -33,18 +26,6 @@ export default function BookEdit() {
   const [coverPreview, setCoverPreview] = useState<string | null>(null)
   const [coverFile, setCoverFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (book && !isNew) {
-      setTitle(book.title ?? '')
-      setIsbn(book.isbn ?? `ISBN-${Date.now()}`)
-      setAuthor(book.author?.name ?? '')
-      setCategoryId(book.categoryId ?? '')
-      setTotalPages(book.totalPages?.toString() ?? '')
-      setDescription(book.description ?? '')
-      setCoverPreview(book.coverImage ?? null)
-    }
-  }, [book, isNew])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -60,7 +41,7 @@ export default function BookEdit() {
       return
     }
     const formData = new FormData()
-    formData.append('isbn', isbn || `ISBN-${Date.now()}`)
+    formData.append('isbn', `ISBN-${Date.now()}`)
     formData.append('title', title)
     formData.append('authorName', author)
     formData.append('categoryId', String(categoryId))
@@ -68,12 +49,12 @@ export default function BookEdit() {
     formData.append('description', description)
     if (coverFile) formData.append('coverImage', coverFile)
 
-    updateBook(formData, {
+    createBook(formData, {
       onSuccess: () => {
-        toast.success(isNew ? 'Book added!' : 'Book updated!')
+        toast.success('Book added!')
         navigate(-1)
       },
-      onError: () => toast.error('Failed to save book'),
+      onError: () => toast.error('Failed to add book'),
     })
   }
 
@@ -89,7 +70,7 @@ export default function BookEdit() {
         <button onClick={() => navigate(-1)} className="text-gray-700">
           <ArrowLeft size={20} />
         </button>
-        <h1 className="text-lg font-bold text-gray-900">{isNew ? 'Add Book' : 'Edit Book'}</h1>
+        <h1 className="text-lg font-bold text-gray-900">Add Book</h1>
       </motion.div>
 
       {/* Main Form - Centered on PC */}
@@ -104,6 +85,7 @@ export default function BookEdit() {
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-gray-700">Title</Label>
             <Input value={title} onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter book title"
               className="h-12 rounded-xl border-gray-200" />
           </div>
 
@@ -111,6 +93,7 @@ export default function BookEdit() {
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-gray-700">Author</Label>
             <Input value={author} onChange={(e) => setAuthor(e.target.value)}
+              placeholder="Enter author name"
               className="h-12 rounded-xl border-gray-200" />
           </div>
 
@@ -139,6 +122,7 @@ export default function BookEdit() {
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-gray-700">Number of Pages</Label>
             <Input type="number" value={totalPages} onChange={(e) => setTotalPages(e.target.value)}
+              placeholder="Enter number of pages"
               className="h-12 rounded-xl border-gray-200" />
           </div>
 
@@ -146,6 +130,7 @@ export default function BookEdit() {
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-gray-700">Description</Label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter book description"
               rows={5}
               className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-blue-400 resize-none" />
           </div>
@@ -191,7 +176,7 @@ export default function BookEdit() {
           {/* Save */}
           <Button onClick={handleSave} disabled={isPending}
             className="w-full rounded-full py-6 font-semibold text-white bg-(--primary-300) hover:bg-(--primary-300)/90">
-            {isPending ? 'Saving...' : 'Save'}
+            {isPending ? 'Adding...' : 'Save'}
           </Button>
         </div>
       </motion.div>

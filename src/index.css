@@ -1,49 +1,44 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* =========================
+   Theme Tokens (Tailwind v4)
+   ========================= */
+
+@theme {
+  /* Font */
+  --font-sans: "Quicksand", sans-serif;
+
+  /* Primary Colors */
+  --color-primary-100: #f6f9fe;
+  --color-primary-200: #d2e3ff;
+  --color-primary-300: #1c65da;
+
+  /* Accent Colors */
+  --color-accent-red: #d9206e;
+  --color-accent-green: #079455;
+  --color-accent-yellow: #fdb022;
+}
+
+
+/* =========================
+   Base Styles
+   ========================= */
 
 @layer base {
-  :root {
-    --primary-100: #f6f9fe;
-    --primary-200: #d2e3ff;
-    --primary-300: #1c65da;
-
-    --accent-red: #d9206e;
-    --accent-green: #079455;
-    --accent-yellow: #fdb022;
-  }
-
-  * {
-    font-family: "Quicksand", sans-serif;
-  }
-
   html {
-    overflow-x: hidden;
+    font-family: var(--font-sans);
     width: 100%;
+    overflow-x: hidden;
   }
 
   body {
-    overflow-x: hidden;
     width: 100%;
+    overflow-x: hidden;
     position: relative;
   }
 
-  #__next,
-  main {
-    overflow-x: hidden;
-    width: 100%;
-  }
-
   section {
-    overflow-x: hidden;
     max-width: 100vw;
-  }
-
-  @media (max-width: 768px) {
-    body,
-    #root {
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
   }
 }

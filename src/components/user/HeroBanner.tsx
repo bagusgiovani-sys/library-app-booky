@@ -18,7 +18,7 @@ export default function HeroBanner() {
       <img
         src={banners[current]}
         alt="Banner"
-        className="w-full h-40 object-cover transition-all duration-500"
+        className="w-full h-40 md:h-84 object-cover transition-all duration-500"
       />
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
         {banners.map((_, i) => (

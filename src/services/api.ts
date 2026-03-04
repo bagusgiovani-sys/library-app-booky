@@ -4,6 +4,9 @@ import { logout } from '@/store/authSlice'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+    headers: {
+    'Cache-Control': 'no-cache',
+  },
 })
 
 api.interceptors.request.use((config) => {

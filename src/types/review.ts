@@ -1,5 +1,5 @@
-import { Book } from './book'
-import { User } from './user'
+import type { Book } from './book'
+import type { User } from './user'
 
 export interface Review {
   id: number

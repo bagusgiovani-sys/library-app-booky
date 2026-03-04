@@ -4,7 +4,6 @@ import { ROUTES } from '@/constants'
 import AdminRoutes from './AdminRoutes'
 import UserRoutes from './UserRoutes'
 
-import AdminLogin from '@/pages/auth/AdminLogin'
 import UserLogin from '@/pages/auth/UserLogin'
 import Register from '@/pages/auth/Register'
 import NotFound from '@/pages/NotFound'
@@ -15,7 +14,6 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path={ROUTES.LOGIN} element={<UserLogin />} />
-      <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin />} />
       <Route path={ROUTES.REGISTER} element={<Register />} />
       <Route path="/admin/*" element={<AdminRoutes />} />
       <Route path="/*" element={<UserRoutes />} />
