@@ -16,7 +16,7 @@ import { ROUTES } from "@/constants";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
-import logo from "@/assets/images/logo.svg";
+import logo from "@/assets/images/Logo.svg";
 import Container from "./Container";
 
 export default function UserNavbar() {
