@@ -12,7 +12,7 @@ import FictionIcon from "@/assets/icons/FictionIcon.svg";
 import NonFictionIcon from "@/assets/icons/NonFiction.svg";
 import SelfImprovementIcon from "@/assets/icons/SelfImprovementIcon.svg";
 import FinanceIcon from "@/assets/icons/Finance.svg";
-import ScienceIcon from "@/assets/icons/ScienceandTechno.svg";
+import ScienceIcon from "@/assets/icons/ScienceAndTechno.svg";
 import EducationIcon from "@/assets/icons/Education.svg";
 import logo from "@/assets/images/Logo.svg";
 
