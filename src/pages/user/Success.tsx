@@ -39,7 +39,7 @@ export default function BorrowSuccess() {
       <Button
         onClick={() => navigate(ROUTES.PROFILE_BORROWED)}
         className="w-full rounded-full py-6 font-semibold text-white"
-        style={{ backgroundColor: 'var(--primary-300)' }}
+        style={{ backgroundColor: 'var(--color-primary-300)' }}
       >
         See Borrowed List
       </Button>

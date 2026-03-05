@@ -74,7 +74,7 @@ export default function Checkout() {
                 <img src={item.book.coverImage} alt={item.book.title} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-2xl"
-                  style={{ backgroundColor: 'var(--primary-200)' }}>📚</div>
+                  style={{ backgroundColor: 'var(--color-primary-300)' }}>📚</div>
               )}
             </div>
             <div className="flex-1 min-w-0">
@@ -160,7 +160,7 @@ export default function Checkout() {
           onClick={handleConfirm}
           disabled={isPending || !agreedReturn || !agreedPolicy}
           className="w-full rounded-full py-6 font-semibold text-white"
-          style={{ backgroundColor: 'var(--primary-300)' }}
+          style={{ backgroundColor: 'var(--color-primary-300)' }}
         >
           {isPending ? 'Processing...' : 'Confirm & Borrow'}
         </Button>

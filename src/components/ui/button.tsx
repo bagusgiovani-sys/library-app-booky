@@ -54,7 +54,7 @@ function Button({
 
   // Apply primary-300 background for default variant unless overridden by style prop
   const defaultStyle = variant === "default" && !(style as React.CSSProperties)?.backgroundColor
-    ? { backgroundColor: 'var(--primary-300)', ...style }
+    ? { backgroundColor: 'var(--color-primary-300)', ...style }
     : style
 
   return (

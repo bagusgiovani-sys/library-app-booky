@@ -12,6 +12,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import BookCard from '@/components/common/BookCard'
 import { formatDateTime } from '@/lib/utils'
 
+const P300 = 'var(--color-primary-300)'
+const P200 = 'var(--color-primary-200)'
+
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5">
@@ -36,19 +39,12 @@ function BorrowModal({ onClose, onConfirm, isPending }: {
     <AnimatePresence>
       <motion.div
         className="fixed inset-0 z-50 flex items-end justify-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       >
-        <motion.div
-          className="absolute inset-0 bg-black/40"
-          onClick={onClose}
-        />
+        <motion.div className="absolute inset-0 bg-black/40" onClick={onClose} />
         <motion.div
           className="relative bg-white w-full max-w-md rounded-t-3xl p-6 space-y-5"
-          initial={{ y: '100%' }}
-          animate={{ y: 0 }}
-          exit={{ y: '100%' }}
+          initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
           <div className="flex items-center justify-between">
@@ -66,9 +62,9 @@ function BorrowModal({ onClose, onConfirm, isPending }: {
                 whileTap={{ scale: 0.96 }}
                 className="flex-1 py-3 rounded-2xl text-sm font-semibold border-2 transition-all"
                 style={{
-                  backgroundColor: selectedDays === days ? 'var(--primary-200)' : 'white',
-                  borderColor: selectedDays === days ? 'var(--primary-300)' : '#e5e7eb',
-                  color: selectedDays === days ? 'var(--primary-300)' : '#374151',
+                  backgroundColor: selectedDays === days ? P200 : 'white',
+                  borderColor: selectedDays === days ? P300 : '#e5e7eb',
+                  color: selectedDays === days ? P300 : '#374151',
                 }}
               >
                 {days} Days
@@ -81,7 +77,7 @@ function BorrowModal({ onClose, onConfirm, isPending }: {
             disabled={isPending}
             whileTap={{ scale: 0.98 }}
             className="w-full py-3 rounded-full text-sm font-semibold text-white disabled:opacity-50"
-            style={{ backgroundColor: 'var(--primary-300)' }}
+            style={{ backgroundColor: P300 }}
           >
             {isPending ? 'Borrowing...' : 'Confirm Borrow'}
           </motion.button>
@@ -95,11 +91,11 @@ export default function BookDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
   const bookId = Number(id)
-  const [reviewPage, setReviewPage] = useState(1)
+  const [reviewPage] = useState(1)
   const [showBorrowModal, setShowBorrowModal] = useState(false)
 
   const { data: bookData, isLoading } = useBookDetail(bookId)
-  const { data: reviewsData } = useBookReviews(bookId, { page: reviewPage, limit: 5 })
+  const { } = useBookReviews(bookId, { page: reviewPage, limit: 5 })
   const { data: relatedBooks } = useRecommendedBooks({ categoryId: bookData?.data?.categoryId, limit: 4 })
   const { mutate: addToCart, isPending: isAddingToCart } = useAddToCart()
   const { mutate: borrowBook, isPending: isBorrowing } = useBorrowBook()
@@ -144,8 +140,7 @@ export default function BookDetail() {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
       className="pb-28 space-y-6"
     >
@@ -158,30 +153,22 @@ export default function BookDetail() {
         <span className="font-semibold text-gray-700 truncate max-w-[140px]">{book.title}</span>
       </nav>
 
-      {/* Cover Image */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-        className="px-4"
-      >
+      {/* Cover */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }} className="px-4">
         <div className="w-full max-w-[200px] mx-auto aspect-[3/4] rounded-2xl overflow-hidden shadow-md bg-gray-100">
           {book.coverImage ? (
             <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-5xl"
-              style={{ backgroundColor: 'var(--primary-200)' }}>📚</div>
+              style={{ backgroundColor: P200 }}>📚</div>
           )}
         </div>
       </motion.div>
 
       {/* Book Info */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.2 }}
-        className="px-4 space-y-2"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }} className="px-4 space-y-2">
         <span className="inline-block text-xs font-semibold px-3 py-1 rounded-full border border-gray-300 text-gray-600">
           {book.category?.name}
         </span>
@@ -194,27 +181,21 @@ export default function BookDetail() {
           <span className="text-sm font-bold text-gray-800">{book.rating?.toFixed(1)}</span>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-gray-100">
           {[
             { label: 'Page', value: book.totalPages ?? '—' },
             { label: 'Rating', value: book.rating?.toFixed(1) ?? '—' },
             { label: 'Reviews', value: book.reviewCount ?? '—' },
           ].map(({ label, value }, i) => (
-            <motion.div
-              key={label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+            <motion.div key={label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 + i * 0.08 }}
-              className="flex flex-col items-center py-3"
-            >
+              className="flex flex-col items-center py-3">
               <span className="text-lg font-bold text-gray-900">{value}</span>
               <span className="text-xs text-gray-400">{label}</span>
             </motion.div>
           ))}
         </div>
 
-        {/* Description */}
         <div className="pt-2">
           <h2 className="text-base font-bold text-gray-900 mb-1">Description</h2>
           <p className="text-sm text-gray-500 leading-relaxed">{book.description}</p>
@@ -222,12 +203,8 @@ export default function BookDetail() {
       </motion.div>
 
       {/* Reviews */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.35 }}
-        className="px-4 space-y-4"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.35 }} className="px-4 space-y-4">
         <div>
           <h2 className="text-xl font-bold text-gray-900">Review</h2>
           <div className="flex items-center gap-2 mt-1">
@@ -237,20 +214,15 @@ export default function BookDetail() {
             </span>
           </div>
         </div>
-
         <div className="space-y-4">
           {reviews.map((review: any, i: number) => (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+            <motion.div key={review.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.07 }}
-              className="bg-white rounded-2xl p-4 shadow-sm space-y-2"
-            >
+              className="bg-white rounded-2xl p-4 shadow-sm space-y-2">
               <div className="flex items-center gap-3">
                 <Avatar className="w-10 h-10">
                   <AvatarImage src={review.user?.profilePhoto ?? ''} />
-                  <AvatarFallback style={{ backgroundColor: 'var(--primary-200)', color: 'var(--primary-300)' }}>
+                  <AvatarFallback style={{ backgroundColor: P200, color: P300 }}>
                     {review.user?.name?.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
@@ -268,12 +240,8 @@ export default function BookDetail() {
 
       {/* Related Books */}
       {relatedBooks && relatedBooks.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.45 }}
-          className="px-4 space-y-4"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.45 }} className="px-4 space-y-4">
           <h2 className="text-xl font-bold text-gray-900">Related Books</h2>
           <div className="grid grid-cols-2 gap-4">
             {relatedBooks.filter((b: any) => b.id !== bookId).slice(0, 4).map((b: any) => (
@@ -290,7 +258,7 @@ export default function BookDetail() {
           disabled={isAddingToCart}
           whileTap={{ scale: 0.97 }}
           className="flex-1 py-3 rounded-full text-sm font-semibold border-2 text-gray-800 disabled:opacity-50"
-          style={{ borderColor: 'var(--primary-300)', backgroundColor: 'white' }}
+          style={{ borderColor: P300, backgroundColor: 'white' }}
         >
           {isAddingToCart ? 'Adding...' : 'Add to Cart'}
         </motion.button>
@@ -298,13 +266,12 @@ export default function BookDetail() {
           onClick={() => setShowBorrowModal(true)}
           whileTap={{ scale: 0.97 }}
           className="flex-1 py-3 rounded-full text-sm font-semibold text-white"
-          style={{ backgroundColor: 'var(--primary-300)' }}
+          style={{ backgroundColor: P300 }}
         >
           Borrow Book
         </motion.button>
       </div>
 
-      {/* Borrow Modal */}
       {showBorrowModal && (
         <BorrowModal
           onClose={() => setShowBorrowModal(false)}
