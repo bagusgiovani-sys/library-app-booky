@@ -1,5 +1,5 @@
 import { Facebook, Instagram, Linkedin } from 'lucide-react'
-import logo from '@/assets/images/logo.svg'
+import logo from '@/assets/images/Logo.svg'
 
 export default function UserFooter() {
   return (
